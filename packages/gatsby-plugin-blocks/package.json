@@ -6,6 +6,7 @@
   "repository": "blocks/blocks",
   "dependencies": {
     "@blocks/react": "^0.0.61",
-    "blocks-ui": "^0.0.70"
+    "blocks-ui": "^0.0.70",
+    "globby": "^11.0.0"
   }
 }

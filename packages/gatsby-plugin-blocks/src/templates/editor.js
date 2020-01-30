@@ -27,6 +27,9 @@ export default ({ relativePath = PAGE }) => {
       })
       const srcCode = await res.text()
       setCode(srcCode)
+
+      const res2 = await fetch('/___blocks/pages')
+      console.log(await res2.json())
     }
 
     initializeCode()

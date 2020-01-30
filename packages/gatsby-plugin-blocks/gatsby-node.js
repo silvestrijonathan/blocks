@@ -3,8 +3,11 @@ const path = require('path')
 const util = require('util')
 
 const bodyParser = require('body-parser')
+const globby = require('globby')
+const { queries } = require('blocks-ui')
 
-const DocTemplate = require.resolve('./src/templates/editor')
+const PagesTemplate = require.resolve('./src/templates/pages')
+const EditorTemplate = require.resolve('./src/templates/editor')
 
 const write = util.promisify(fs.writeFile)
 const read = util.promisify(fs.readFile)
@@ -54,6 +57,25 @@ exports.onCreateDevServer = ({ app, store, reporter }) => {
     const code = await getFileContents(page)
     res.send(code)
   })
+
+  app.get('/___blocks/pages', async (_, res) => {
+    const globPattern = dirname + '/**/*.js'
+    const pages = globby.sync(globPattern, { nodir: true })
+
+    const blocksPromises = pages.map(async page => {
+      const src = await read(page)
+
+      try {
+        const blocks = queries.getBlocks(src)
+        if (blocks.length) {
+          return page
+        }
+      } catch (e) {}
+    }, [])
+
+    const blocksPages = await Promise.all(blocksPromises)
+    res.send(blocksPages.filter(Boolean))
+  })
 }
 
 exports.createPages = ({ actions }) => {
@@ -61,6 +83,10 @@ exports.createPages = ({ actions }) => {
 
   createPage({
     path: '___blocks',
-    component: DocTemplate
+    component: PagesTemplate
+  })
+  createPage({
+    path: '___blocks/edit',
+    component: EditorTemplate
   })
 }
