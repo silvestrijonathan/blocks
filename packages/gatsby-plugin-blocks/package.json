@@ -7,6 +7,7 @@
   "dependencies": {
     "@blocks/react": "^0.0.61",
     "blocks-ui": "^0.0.70",
+    "get-query-param": "^2.0.3",
     "globby": "^11.0.0"
   }
 }

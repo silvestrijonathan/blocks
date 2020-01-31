@@ -22,6 +22,10 @@ exports.onCreateDevServer = ({ app, store, reporter }) => {
     return contents
   }
 
+  const relativizePagePath = pagePath => {
+    return pagePath.replace(dirname + path.sep, '')
+  }
+
   app.use(bodyParser.json())
 
   app.post('/___blocks', async (req, res) => {
@@ -73,8 +77,9 @@ exports.onCreateDevServer = ({ app, store, reporter }) => {
       } catch (e) {}
     }, [])
 
-    const blocksPages = await Promise.all(blocksPromises)
-    res.send(blocksPages.filter(Boolean))
+    const allBlocksPages = await Promise.all(blocksPromises)
+    const blocksPages = allBlocksPages.filter(Boolean).map(relativizePagePath)
+    res.send(blocksPages)
   })
 }
 

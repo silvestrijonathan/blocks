@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Editor from 'blocks-ui'
 import * as Blocks from '@blocks/react'
+import getQueryParam from 'get-query-param'
 
 import useDebounce from '../use-debounce'
 
@@ -12,7 +13,12 @@ const Layout = props => {
 
 export default ({ relativePath = PAGE }) => {
   const [code, setCode] = useState(null)
+  const [page, setPage] = useState(null)
   const debouncedCode = useDebounce(code)
+
+  useEffect(() => {
+    setPage(getQueryParam('page', window.location.href))
+  })
 
   useEffect(() => {
     const initializeCode = async () => {
@@ -21,19 +27,16 @@ export default ({ relativePath = PAGE }) => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          page: relativePath
-        })
+        body: JSON.stringify({ page })
       })
       const srcCode = await res.text()
       setCode(srcCode)
-
-      const res2 = await fetch('/___blocks/pages')
-      console.log(await res2.json())
     }
 
-    initializeCode()
-  }, [])
+    if (page) {
+      initializeCode()
+    }
+  }, [page])
 
   useEffect(() => {
     if (!debouncedCode) {
@@ -52,7 +55,7 @@ export default ({ relativePath = PAGE }) => {
     })
   }, [debouncedCode])
 
-  if (!code) {
+  if (!code || !page) {
     return null
   }
 
