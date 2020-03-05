@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@babel/plugin-proposal-export-namespace-from": "7.8.3",
-    "@babel/preset-env": "7.8.4",
+    "@babel/preset-env": "7.8.7",
     "@babel/preset-react": "7.8.3",
     "@changesets/cli": "2.5.1",
     "@emotion/core": "10.0.27",
@@ -54,7 +54,7 @@
     "@theme-ui/components": "0.3.1",
     "@theme-ui/presets": "0.3.0",
     "@theme-ui/prism": "0.3.0",
-    "babel-eslint": "10.0.3",
+    "babel-eslint": "10.1.0",
     "eslint": "6.8.0",
     "eslint-plugin-flowtype": "4.6.0",
     "eslint-plugin-import": "2.20.1",
